@@ -150,3 +150,52 @@ body {
     opacity: 1;
     transform: translateY(-10px);
 }
+
+@media (max-width: 768px) {
+    body {
+        justify-content: center;
+        align-items: flex-start;
+        background-size: cover;
+    }
+
+    .button-container {
+        position: relative;
+        right: 0;
+        top: 30%;
+        transform: translateY(-30%);
+        width: 100%;
+        align-items: center;
+    }
+
+    .button-wrapper {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .button-text {
+        font-size: 20px;
+        text-align: center;
+        margin-right: 0;
+        width: auto;
+    }
+
+    .rick-button {
+        width: 180px;
+        height: 180px;
+    }
+
+    .shrek-container {
+        right: 10px;
+        bottom: 10px;
+    }
+
+    .shrek-button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .gif-container {
+        width: 80px;
+        height: 160px;
+    }
+}
