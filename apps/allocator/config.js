@@ -3,7 +3,7 @@
 // `video` is an optional local-dev fallback.
 window.RICK_CONFIG = {
   brand: "rickclick",
-  signEndpoint: "https://rickclick-media.catherine-olivia-lee.workers.dev/sign",
+  signEndpoint: "https://media.rickclick.com/sign",
   revealAt: 0,
   video: "./latest-footage.mp4"
 };

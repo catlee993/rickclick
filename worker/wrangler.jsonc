@@ -20,9 +20,9 @@
   // SIGNING_KEY is a secret, set via:  npx wrangler secret put SIGNING_KEY
   // (do NOT put it in vars).
 
-  // Serve the worker from your media subdomain. Uncomment + edit once the
-  // zone is on Cloudflare:
-  // "routes": [ { "pattern": "media.yourdomain.com", "custom_domain": true } ]
+  // Serve the worker from a custom subdomain so the *.workers.dev name (which
+  // embeds the account owner's name) isn't the public URL.
+  "routes": [ { "pattern": "media.rickclick.com", "custom_domain": true } ],
 
   "observability": { "enabled": true }
 }

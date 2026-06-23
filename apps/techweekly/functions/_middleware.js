@@ -13,5 +13,8 @@ export async function onRequest(context) {
   const res = await context.next();
   const out = new Response(res.body, res);
   out.headers.set("X-Robots-Tag", "noindex, nofollow");
+  // Keep the small control scripts fresh so config/worker-URL changes propagate
+  // immediately instead of being stuck behind a multi-hour asset cache.
+  if (url.pathname.endsWith(".js")) out.headers.set("Cache-Control", "no-cache");
   return out;
 }

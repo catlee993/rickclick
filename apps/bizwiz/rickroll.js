@@ -17,6 +17,27 @@
 
   var cachedSrc = FALLBACK; // used immediately if no signing endpoint
   var refreshTimer = null;
+  var preloadEl = null;     // hidden, pre-buffered video for instant playback
+
+  // Keep a hidden, muted, fully-buffering copy of the clip ready off-screen so
+  // the click has zero network wait — the video is already in memory.
+  function buildPreload(src) {
+    if (!src) return;
+    if (!preloadEl) {
+      preloadEl = document.createElement("video");
+      preloadEl.muted = true;            // muted lets it buffer with no gesture
+      preloadEl.preload = "auto";
+      preloadEl.playsInline = true;
+      preloadEl.setAttribute("playsinline", "");
+      preloadEl.style.cssText =
+        "position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;";
+      document.body.appendChild(preloadEl);
+    }
+    if (preloadEl.getAttribute("src") !== src) {
+      preloadEl.src = src;
+      preloadEl.load();
+    }
+  }
 
   function fetchSigned() {
     if (!SIGN) return Promise.resolve(FALLBACK);
@@ -24,6 +45,7 @@
       .then(function (r) { if (!r.ok) throw new Error("sign " + r.status); return r.json(); })
       .then(function (j) {
         cachedSrc = j.url;
+        buildPreload(cachedSrc); // start buffering the bytes immediately
         // Refresh a little before the token expires so it's always warm.
         if (refreshTimer) clearTimeout(refreshTimer);
         var ms = Math.max(15, (j.ttl || 120) - 30) * 1000;
@@ -48,29 +70,61 @@
     document.title = h + (CFG.brand ? " | " + CFG.brand : "");
   }
 
+  function goFullscreen(el) {
+    var fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (fn) { try { var p = fn.call(el); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  }
+
   function play(overlay, src) {
-    var video = document.createElement("video");
-    video.src = src;
+    // Reuse the pre-buffered element if it's ready — instant first frame.
+    var video = (preloadEl && preloadEl.getAttribute("src") === src) ? preloadEl : document.createElement("video");
+    if (video === preloadEl) { preloadEl = null; video.style.cssText = ""; }
+    else { video.src = src; }
     video.autoplay = true;
     video.controls = false;
     video.playsInline = true;
     video.setAttribute("playsinline", "");
     video.className = "rr-video";
+    video.muted = false;
+    video.volume = 1.0;
     overlay.appendChild(video);
+
+    var retried = false;
+    function freshen(then) {
+      // get a brand-new signed URL and re-point the element (self-heal on expiry/403)
+      fetchSigned().then(function (src) {
+        if (!src) return;
+        video.src = src; video.load();
+        if (then) then();
+      }).catch(function () {});
+    }
 
     function seekAndPlay() {
       try { if (REVEAL_AT) video.currentTime = REVEAL_AT; } catch (e) {}
+      video.muted = false; video.volume = 1.0;
       var attempt = video.play();
       if (attempt && attempt.catch) {
         attempt.catch(function () {
+          // Autoplay genuinely blocked — offer a tap that also refreshes the URL.
           var btn = document.createElement("button");
           btn.className = "rr-play";
           btn.textContent = "▶ Play";
-          btn.addEventListener("click", function () { video.play(); btn.remove(); });
+          btn.addEventListener("click", function () {
+            video.muted = false; video.volume = 1.0;
+            video.play().catch(function () { freshen(function () { video.play(); }); });
+            btn.remove();
+          });
           overlay.appendChild(btn);
         });
       }
     }
+
+    // If the media URL fails (expired token / transient 403), refetch once and retry.
+    video.addEventListener("error", function () {
+      if (retried) return; retried = true;
+      freshen(seekAndPlay);
+    });
+
     if (video.readyState >= 1) seekAndPlay();
     else video.addEventListener("loadedmetadata", seekAndPlay);
 
@@ -89,6 +143,7 @@
     document.body.appendChild(overlay);
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    goFullscreen(overlay); // must be in the click gesture — full takeover, no chrome
 
     if (cachedSrc) {
       play(overlay, cachedSrc);

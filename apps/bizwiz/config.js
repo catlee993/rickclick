@@ -1,6 +1,6 @@
 // Per-site rickroll config. See techweekly/config.js for notes.
 window.RICK_CONFIG = {
   brand: "BizWiz",
-  signEndpoint: "https://rickclick-media.catherine-olivia-lee.workers.dev/sign",
+  signEndpoint: "https://media.rickclick.com/sign",
   revealAt: 0
 };
