@@ -53,8 +53,19 @@ function timingSafeEqual(a: string, b: string): boolean {
   return out === 0;
 }
 
+// R2 reads can occasionally hiccup — retry once before giving up.
+async function r2head(env: Env, key: string) {
+  try { return await env.MEDIA.head(key); }
+  catch (e) { return await env.MEDIA.head(key); }
+}
+async function r2get(env: Env, key: string, opts?: R2GetOptions) {
+  try { return await env.MEDIA.get(key, opts); }
+  catch (e) { return await env.MEDIA.get(key, opts); }
+}
+
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
+   try {
     const url = new URL(req.url);
     const allowed = allowList(env);
     const origin = req.headers.get("Origin");
@@ -104,7 +115,7 @@ export default {
         return new Response("bad signature", { status: 403 });
       }
 
-      const head = await env.MEDIA.head(KEY);
+      const head = await r2head(env, KEY);
       if (!head) return new Response("not found", { status: 404 });
       const size = head.size;
       const contentType = head.httpMetadata?.contentType || "video/mp4";
@@ -123,19 +134,23 @@ export default {
         if (isNaN(start) || start < 0) start = 0;
         if (isNaN(end) || end >= size) end = size - 1;
         if (start > end) return new Response("range not satisfiable", { status: 416 });
-        const obj = await env.MEDIA.get(KEY, { range: { offset: start, length: end - start + 1 } });
+        const obj = await r2get(env, KEY, { range: { offset: start, length: end - start + 1 } });
         if (!obj) return new Response("not found", { status: 404 });
         headers.set("content-range", `bytes ${start}-${end}/${size}`);
         headers.set("content-length", String(end - start + 1));
         return new Response(obj.body, { status: 206, headers });
       }
 
-      const obj = await env.MEDIA.get(KEY);
+      const obj = await r2get(env, KEY);
       if (!obj) return new Response("not found", { status: 404 });
       headers.set("content-length", String(size));
       return new Response(obj.body, { status: 200, headers });
     }
 
     return new Response("not found", { status: 404 });
+   } catch (e) {
+    // Never 500 — return a retryable status so the client self-heals.
+    return new Response("temporarily unavailable", { status: 503 });
+   }
   },
 };

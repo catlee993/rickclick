@@ -186,11 +186,11 @@
   }
 
   function interceptLinks() {
-    // Any link on the page is a trap — clicking it rickrolls instead of navigating.
+    // The whole page is a trap — ANY click rickrolls (links, buttons, anything).
     document.addEventListener("click", function (e) {
-      var a = e.target.closest ? e.target.closest("a") : null;
-      if (!a) return;
+      if (document.querySelector(".rr-overlay")) return; // already playing — don't interrupt
       e.preventDefault();
+      e.stopPropagation();
       rickroll();
     }, true);
   }

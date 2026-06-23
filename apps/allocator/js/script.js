@@ -99,54 +99,78 @@ document.getElementById('tech').addEventListener('click', (event) => handleButto
 document.getElementById('business').addEventListener('click', (event) => handleButtonClick('business', event));
 document.getElementById('news').addEventListener('click', (event) => handleButtonClick('news', event));
 
-document.getElementById('shrek3').addEventListener('click', () => {
-    // Hide the existing content
-    document.querySelector('.button-container').style.display = 'none';
-    document.querySelector('.gif-container').style.display = 'none';
-    document.querySelector('.shrek-container').style.display = 'none';
-
-    const videoContainer = document.createElement('div');
-    videoContainer.className = 'video-container';
-    videoContainer.style.position = 'absolute';
-    videoContainer.style.top = '0';
-    videoContainer.style.left = '0';
-    videoContainer.style.width = '100%';
-    videoContainer.style.height = '100%';
-    videoContainer.style.display = 'flex';
-    videoContainer.style.justifyContent = 'center';
-    videoContainer.style.alignItems = 'center';
-    videoContainer.style.backgroundColor = 'black';
-    videoContainer.style.zIndex = '1000';
-
-    const videoElement = document.createElement('video');
-    videoElement.autoplay = true;
-    videoElement.style.width = '80%';
-    videoElement.style.height = 'auto';
-    videoElement.style.maxWidth = '1200px';
-    videoElement.style.maxHeight = '90%';
-
-    videoContainer.appendChild(videoElement);
-    document.body.appendChild(videoContainer);
-
+// --- Shrek easter-egg video: preload + signed URL + self-heal (mirrors the
+//     landing sites' rickroll.js so it loads instantly and recovers from errors).
+(function () {
     const CFG = window.RICK_CONFIG || {};
-    const revealAt = (CFG.revealAt != null) ? CFG.revealAt : 0;
+    const REVEAL_AT = (CFG.revealAt != null) ? CFG.revealAt : 0;
+    const FALLBACK = CFG.video || './latest-footage.mp4';
+    let cachedSrc = CFG.signEndpoint ? null : FALLBACK;
+    let preloadEl = null;
+    let refreshTimer = null;
 
-    videoElement.addEventListener('loadedmetadata', () => {
-        videoElement.currentTime = revealAt;
-        videoElement.play().catch(err => {
-            console.error('Autoplay failed:', err);
-        });
-    });
-
-    // Stream from the gatekeeper worker (private R2 + signed URL). Fall back to
-    // a local file for offline dev.
-    const fallback = CFG.video || './latest-footage.mp4';
-    if (CFG.signEndpoint) {
-        fetch(CFG.signEndpoint, { credentials: 'omit', cache: 'no-store' })
-            .then(r => { if (!r.ok) throw new Error('sign ' + r.status); return r.json(); })
-            .then(j => { videoElement.src = j.url; })
-            .catch(() => { videoElement.src = fallback; });
-    } else {
-        videoElement.src = fallback;
+    function buildPreload(src) {
+        if (!src) return;
+        if (!preloadEl) {
+            preloadEl = document.createElement('video');
+            preloadEl.muted = true; preloadEl.preload = 'auto'; preloadEl.playsInline = true;
+            preloadEl.setAttribute('playsinline', '');
+            preloadEl.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;';
+            document.body.appendChild(preloadEl);
+        }
+        if (preloadEl.getAttribute('src') !== src) { preloadEl.src = src; preloadEl.load(); }
     }
-});
+
+    function fetchSigned() {
+        if (!CFG.signEndpoint) return Promise.resolve(FALLBACK);
+        return fetch(CFG.signEndpoint, { credentials: 'omit', cache: 'no-store' })
+            .then(r => { if (!r.ok) throw new Error('sign ' + r.status); return r.json(); })
+            .then(j => {
+                cachedSrc = j.url;
+                buildPreload(cachedSrc);
+                if (refreshTimer) clearTimeout(refreshTimer);
+                refreshTimer = setTimeout(() => fetchSigned().catch(() => {}), Math.max(15, (j.ttl || 120) - 30) * 1000);
+                return cachedSrc;
+            });
+    }
+
+    function goFullscreen(el) {
+        const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+        if (fn) { try { const p = fn.call(el); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+    }
+
+    fetchSigned().catch(() => {}); // warm up on page load
+
+    document.getElementById('shrek3').addEventListener('click', () => {
+        document.querySelector('.button-container').style.display = 'none';
+        document.querySelector('.gif-container').style.display = 'none';
+        document.querySelector('.shrek-container').style.display = 'none';
+
+        const videoContainer = document.createElement('div');
+        videoContainer.className = 'video-container';
+        videoContainer.style.cssText = 'position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#000;z-index:1000;';
+        document.body.appendChild(videoContainer);
+        goFullscreen(videoContainer);
+
+        // Reuse the pre-buffered element for an instant start.
+        const video = (preloadEl && preloadEl.getAttribute('src') === cachedSrc) ? preloadEl : document.createElement('video');
+        if (video === preloadEl) { preloadEl = null; } else if (cachedSrc) { video.src = cachedSrc; }
+        video.autoplay = true; video.controls = false; video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.muted = false; video.volume = 1.0;
+        video.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+        videoContainer.appendChild(video);
+
+        let retried = false;
+        const freshen = (then) => fetchSigned().then(src => { if (src) { video.src = src; video.load(); if (then) then(); } }).catch(() => {});
+        const seekAndPlay = () => {
+            try { if (REVEAL_AT) video.currentTime = REVEAL_AT; } catch (e) {}
+            video.muted = false; video.volume = 1.0;
+            const a = video.play();
+            if (a && a.catch) a.catch(() => freshen(() => video.play()));
+        };
+        video.addEventListener('error', () => { if (retried) return; retried = true; freshen(seekAndPlay); });
+        video.addEventListener('ended', () => { try { video.currentTime = REVEAL_AT || 0; } catch (e) {} video.play(); });
+        if (video.readyState >= 1) seekAndPlay(); else video.addEventListener('loadedmetadata', seekAndPlay);
+    });
+})();
