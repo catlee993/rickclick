@@ -1,0 +1,3 @@
+# Serve the article for ANY path so allocator-generated slugs
+# (e.g. /how-to-deploy-cloud-efficiently) all resolve to the page.
+/*  /index.html  200

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" width="150" height="150">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#ffe27a"/>
+      <stop offset="100%" stop-color="#e8a33d"/>
+    </radialGradient>
+  </defs>
+  <circle cx="75" cy="75" r="72" fill="url(#bg)" stroke="#fff" stroke-width="4"/>
+  <!-- hair -->
+  <path d="M30 60 Q40 22 75 20 Q110 22 120 60 Q108 46 75 44 Q42 46 30 60Z" fill="#c0392b"/>
+  <!-- face -->
+  <ellipse cx="75" cy="86" rx="40" ry="44" fill="#ffd9b3"/>
+  <!-- sunglasses -->
+  <rect x="36" y="70" width="32" height="22" rx="6" fill="#1a1a1a"/>
+  <rect x="82" y="70" width="32" height="22" rx="6" fill="#1a1a1a"/>
+  <rect x="68" y="77" width="14" height="5" fill="#1a1a1a"/>
+  <!-- smirk -->
+  <path d="M58 110 Q75 124 92 110" stroke="#9c5a36" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

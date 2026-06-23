@@ -1,0 +1,12 @@
+.DS_Store
+*.bak
+node_modules/
+.wrangler/
+.idea/
+
+# Large / derived media. Source of truth for the rickroll clip is R2.
+# latest-footage.mp4 is regenerated via the yt-dlp + ffmpeg commands in
+# README.md, and streamed in prod from the private rickclick R2 bucket.
+latest-footage.mp4
+apps/allocator/latest-footage.mp4
+rr-raw.mp4

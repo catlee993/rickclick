@@ -125,20 +125,28 @@ document.getElementById('shrek3').addEventListener('click', () => {
     videoElement.style.maxWidth = '1200px';
     videoElement.style.maxHeight = '90%';
 
-    const sourceElement = document.createElement('source');
-    sourceElement.src = './shrek-clip-compilation.mp4';
-    sourceElement.type = 'video/mp4';
-
-    videoElement.appendChild(sourceElement);
-
     videoContainer.appendChild(videoElement);
-
     document.body.appendChild(videoContainer);
-    
+
+    const CFG = window.RICK_CONFIG || {};
+    const revealAt = (CFG.revealAt != null) ? CFG.revealAt : 0;
+
     videoElement.addEventListener('loadedmetadata', () => {
-        videoElement.currentTime = 43;
+        videoElement.currentTime = revealAt;
         videoElement.play().catch(err => {
             console.error('Autoplay failed:', err);
         });
     });
+
+    // Stream from the gatekeeper worker (private R2 + signed URL). Fall back to
+    // a local file for offline dev.
+    const fallback = CFG.video || './latest-footage.mp4';
+    if (CFG.signEndpoint) {
+        fetch(CFG.signEndpoint, { credentials: 'omit', cache: 'no-store' })
+            .then(r => { if (!r.ok) throw new Error('sign ' + r.status); return r.json(); })
+            .then(j => { videoElement.src = j.url; })
+            .catch(() => { videoElement.src = fallback; });
+    } else {
+        videoElement.src = fallback;
+    }
 });

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WireNow</title>
+  <meta name="description" content="WireNow — breaking news and live updates from around the world.">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./article.css">
+  <link rel="stylesheet" href="./rickroll.css">
+  <style>
+    :root {
+      --accent: #c8102e; --accent-2: #1a1a1a; --rr-accent: #c8102e;
+      --ink: #141414; --bg: #ffffff;
+      --font-head: "Arial Black", Arial, Helvetica, sans-serif;
+      --font-body: Georgia, "Times New Roman", serif;
+    }
+    .live-strip {
+      background: #c8102e; color: #fff; font-family: var(--font-head);
+      font-size: 13px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+      text-align: center; padding: 6px 10px;
+    }
+    .live-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fff; margin-right: 7px; animation: blink 1.2s infinite; }
+    @keyframes blink { 50% { opacity: .25; } }
+  </style>
+</head>
+<body>
+  <div class="live-strip"><span class="live-dot"></span>Live · Developing story · Updated moments ago</div>
+  <header class="site-topbar">
+    <div class="site-topbar-inner">
+      <a class="site-logo" href="/" aria-label="WireNow home">
+        <svg viewBox="0 0 215 40" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="6" width="28" height="28" rx="4" fill="#c8102e"/>
+          <circle cx="14" cy="20" r="4" fill="#fff"/>
+          <path d="M14 20 a8 8 0 0 1 8 8 M14 20 a13 13 0 0 1 13 13" stroke="#fff" stroke-width="2.4" fill="none"/>
+          <text x="38" y="28" font-family="Arial Black, Arial, sans-serif" font-size="23" font-weight="900" fill="#141414">Wire<tspan fill="#c8102e">Now</tspan></text>
+        </svg>
+      </a>
+      <nav class="site-nav">
+        <a href="/">World</a><a href="/">Politics</a><a href="/">Business</a><a href="/">Tech</a><a href="/">Live</a>
+      </nav>
+      <a class="site-cta" href="/">Watch Live</a>
+    </div>
+  </header>
+
+  <main class="article">
+    <div class="kicker">Breaking</div>
+    <h1 class="headline" data-headline>Breaking: Summit Escalates Rapidly</h1>
+    <p class="standfirst">Officials are responding in real time as the situation develops. This page is being updated continuously.</p>
+    <div class="byline">
+      <span class="avatar">WN</span>
+      <span><strong>WireNow Staff</strong> and agencies</span>
+      <span class="sep">•</span><span>Live</span>
+      <span class="sep">•</span><span>June 23, 2026</span>
+    </div>
+
+    <figure class="hero">
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Breaking news graphic">
+        <rect width="760" height="360" fill="#1a1a1a"/>
+        <rect width="760" height="360" fill="url(#vg)"/>
+        <defs><radialGradient id="vg" cx="50%" cy="40%" r="70%">
+          <stop offset="0" stop-color="#3a3a3a"/><stop offset="1" stop-color="#0d0d0d"/></radialGradient></defs>
+        <g opacity="0.9">
+          <rect x="40" y="250" width="680" height="58" fill="#c8102e"/>
+          <text x="60" y="289" font-family="Arial Black, Arial, sans-serif" font-size="30" font-weight="900" fill="#fff">BREAKING NEWS</text>
+        </g>
+        <g fill="rgba(255,255,255,.10)"><circle cx="600" cy="120" r="80"/><circle cx="180" cy="90" r="48"/></g>
+        <rect x="40" y="312" width="680" height="22" fill="#000"/>
+        <text x="52" y="328" font-family="Arial, sans-serif" font-size="13" fill="#bbb">LIVE  ·  reporters on the ground  ·  more to follow</text>
+      </svg>
+      <figcaption>Live coverage continues. Image: WireNow</figcaption>
+    </figure>
+
+    <div class="article-body">
+      <p>The situation developed quickly over the past hour, according to multiple officials briefed on the matter, with responders moving to contain what one described as a fast-changing picture.</p>
+      <p>Early accounts remain fragmentary and have not been independently verified. WireNow is working to confirm details and will update this story as more information becomes available.</p>
+      <div class="paywall-fade">
+        <h2>What we know so far</h2>
+        <p>Authorities have urged the public to rely on official channels and to treat unconfirmed reports circulating online with caution. A briefing is expected shortly.</p>
+        <p>Analysts cautioned against drawing conclusions while the events are still unfolding, noting that initial figures in situations like this are frequently revised.</p>
+        <p>To continue following our live coverage, please confirm your cookie preferences below.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <span>© 2026 WireNow. A continuously updated news service.</span>
+      <span>About · Corrections · Privacy · Terms · Contact</span>
+    </div>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./rickroll.js"></script>
+</body>
+</html>

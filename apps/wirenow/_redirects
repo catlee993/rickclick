@@ -1,0 +1,2 @@
+# Serve the article for ANY path so allocator-generated slugs resolve.
+/*  /index.html  200

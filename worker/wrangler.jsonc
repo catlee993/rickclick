@@ -1,0 +1,28 @@
+{
+  // Gatekeeper for the rickroll clip. Private R2 bucket + signed, origin-locked
+  // streaming. Separate worker + separate bucket from interestnaut.
+  "name": "rickclick-media",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-01-01",
+
+  // Private bucket — NEVER enable public access on it. Only this worker reads it.
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "rickclick", "preview_bucket_name": "rickclick" }
+  ],
+
+  "vars": {
+    // Only these origins may mint signed URLs. Edit to your real domains.
+    "ALLOWED_ORIGINS": "https://techweekly.xyz,https://bizwiz.lol,https://wirenow.info,https://YOUR-ALLOCATOR-DOMAIN",
+    "VIDEO_KEY": "latest-footage.mp4",
+    "TTL_SECONDS": "120"
+  },
+
+  // SIGNING_KEY is a secret, set via:  npx wrangler secret put SIGNING_KEY
+  // (do NOT put it in vars).
+
+  // Serve the worker from your media subdomain. Uncomment + edit once the
+  // zone is on Cloudflare:
+  // "routes": [ { "pattern": "media.yourdomain.com", "custom_domain": true } ]
+
+  "observability": { "enabled": true }
+}

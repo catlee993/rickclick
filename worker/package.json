@@ -1,0 +1,13 @@
+{
+  "name": "rickclick-media",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "secret": "wrangler secret put SIGNING_KEY"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "wrangler": "^3.99.0"
+  }
+}

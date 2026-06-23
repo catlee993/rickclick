@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TechWeekly</title>
+  <meta name="description" content="TechWeekly — independent reporting on software, security and the future of computing.">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./article.css">
+  <link rel="stylesheet" href="./rickroll.css">
+  <style>
+    :root {
+      --accent: #4f46e5; --accent-2: #0ea5e9; --rr-accent: #4f46e5;
+      --ink: #0f172a; --bg: #ffffff;
+      --font-head: "Segoe UI", Helvetica, Arial, sans-serif;
+      --font-body: Georgia, "Times New Roman", serif;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-topbar">
+    <div class="site-topbar-inner">
+      <a class="site-logo" href="/" aria-label="TechWeekly home">
+        <svg viewBox="0 0 230 40" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="6" width="28" height="28" rx="7" fill="#4f46e5"/>
+          <path d="M8 20 L13 25 L21 14" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="38" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="800" fill="#0f172a">Tech<tspan fill="#4f46e5">Weekly</tspan></text>
+        </svg>
+      </a>
+      <nav class="site-nav">
+        <a href="/">AI</a><a href="/">Security</a><a href="/">Cloud</a><a href="/">Dev</a><a href="/">Hardware</a>
+      </nav>
+      <a class="site-cta" href="/">Subscribe</a>
+    </div>
+  </header>
+
+  <main class="article">
+    <div class="kicker">Engineering</div>
+    <h1 class="headline" data-headline>The Future of Cloud: Deploy Seamlessly</h1>
+    <p class="standfirst">Inside the architecture shift that engineering teams are quietly betting their roadmaps on this year.</p>
+    <div class="byline">
+      <span class="avatar">JR</span>
+      <span><strong>By Jordan Reyes</strong>, Senior Staff Writer</span>
+      <span class="sep">•</span><span>7 min read</span>
+      <span class="sep">•</span><span>Updated June 23, 2026</span>
+    </div>
+
+    <figure class="hero">
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Abstract server cluster illustration">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#312e81"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+        <rect width="760" height="360" fill="url(#g)"/>
+        <g fill="rgba(255,255,255,.10)">
+          <rect x="90" y="70" width="120" height="220" rx="8"/><rect x="320" y="40" width="120" height="280" rx="8"/><rect x="550" y="90" width="120" height="200" rx="8"/>
+        </g>
+        <g fill="rgba(255,255,255,.85)">
+          <circle cx="150" cy="110" r="6"/><circle cx="150" cy="140" r="6"/><circle cx="380" cy="90" r="6"/><circle cx="380" cy="120" r="6"/><circle cx="610" cy="130" r="6"/>
+        </g>
+        <g stroke="rgba(255,255,255,.4)" stroke-width="2">
+          <path d="M210 180 H320" fill="none"/><path d="M440 180 H550" fill="none"/>
+        </g>
+      </svg>
+      <figcaption>Modern workloads increasingly span ephemeral edge nodes. Illustration: TechWeekly</figcaption>
+    </figure>
+
+    <div class="article-body">
+      <p>For years the conventional wisdom held that consolidation was king. But a growing cohort of platform teams is reversing course, distributing compute closer to where requests actually originate and treating the data center as a fallback rather than a foundation.</p>
+      <p>"We stopped thinking about servers and started thinking about request lifetimes," said one infrastructure lead who asked not to be named while their migration is still underway. The results, they claim, have been dramatic: tail latency down by double digits, and on-call pages down even further.</p>
+      <div class="paywall-fade">
+        <h2>What changed</h2>
+        <p>The shift is partly economic and partly cultural. Egress pricing, long the silent tax on ambitious architectures, has collapsed at several providers, removing the financial penalty for moving data to the user instead of the other way around.</p>
+        <p>At the same time, a new generation of tooling has made it trivial to ship the same artifact to dozens of regions at once, eliminating the operational drag that once made such designs the exclusive domain of hyperscalers.</p>
+        <p>To continue reading this article and access the full TechWeekly archive, please review your privacy preferences below.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <span>© 2026 TechWeekly Media. All rights reserved.</span>
+      <span>About · Contact · Privacy · Terms · Advertise</span>
+    </div>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./rickroll.js"></script>
+</body>
+</html>
