@@ -6,6 +6,6 @@
 // `video` is an optional direct-URL fallback for local dev only.
 window.RICK_CONFIG = {
   brand: "TechWeekly",
-  signEndpoint: "https://media.example.com/sign",
+  signEndpoint: "https://rickclick-media.catherine-olivia-lee.workers.dev/sign",
   revealAt: 0
 };

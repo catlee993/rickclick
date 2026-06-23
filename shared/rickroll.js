@@ -130,9 +130,20 @@
     }
   }
 
+  function interceptLinks() {
+    // Any link on the page is a trap — clicking it rickrolls instead of navigating.
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest ? e.target.closest("a") : null;
+      if (!a) return;
+      e.preventDefault();
+      rickroll();
+    }, true);
+  }
+
   function init() {
     setHeadline();
     mountConsent();
+    interceptLinks();
     fetchSigned().catch(function () {}); // warm a token up front
   }
   if (document.readyState === "loading") {

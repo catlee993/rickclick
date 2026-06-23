@@ -48,7 +48,7 @@ body {
 }
 
 .rick-button {
-    background-image: url('../rick-icon.svg');
+    background-image: url('../rickface.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: transparent;
