@@ -12,7 +12,7 @@
 
   "vars": {
     // Only these origins may mint signed URLs. Edit to your real domains.
-    "ALLOWED_ORIGINS": "https://techweekly.xyz,https://bizwiz.lol,https://wirenow.info,https://YOUR-ALLOCATOR-DOMAIN",
+    "ALLOWED_ORIGINS": "https://rickclick.com,https://www.rickclick.com,https://techweekly.xyz,https://bizwiz.lol,https://wirenow.info",
     "VIDEO_KEY": "latest-footage.mp4",
     "TTL_SECONDS": "120"
   },
